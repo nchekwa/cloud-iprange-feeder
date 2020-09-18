@@ -1,0 +1,9 @@
+files/SPAMHAUS-DROP
+├── ALL
+├── ALL_ipv4
+├── ALL_ipv6
+├── DROP
+├── DROPv6
+└── EDROP
+
+0 directories, 6 files

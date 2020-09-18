@@ -1,0 +1,33 @@
+files/GOOGLE-GCS
+├── ALL
+├── ALL_ipv4
+├── ALL_ipv6
+├── rgn_asia-east1
+├── rgn_asia-east2
+├── rgn_asia-northeast1
+├── rgn_asia-northeast2
+├── rgn_asia-northeast3
+├── rgn_asia-south1
+├── rgn_asia-southeast1
+├── rgn_asia-southeast2
+├── rgn_australia-southeast1
+├── rgn_europe-north1
+├── rgn_europe-west1
+├── rgn_europe-west2
+├── rgn_europe-west3
+├── rgn_europe-west4
+├── rgn_europe-west6
+├── rgn_global
+├── rgn_northamerica-northeast1
+├── rgn_southamerica-east1
+├── rgn_us-central1
+├── rgn_us-central2
+├── rgn_us-east1
+├── rgn_us-east4
+├── rgn_us-west1
+├── rgn_us-west2
+├── rgn_us-west3
+├── rgn_us-west4
+└── svc_Google_Cloud
+
+0 directories, 30 files
