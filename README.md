@@ -42,33 +42,34 @@ files/AMAZON-AWS.txt
 SRX#
 ```
 [edit security dynamic-address]
-set security dynamic-address feed-server MyServer url http://192.168.254.83/FEED.tgz
-set security dynamic-address feed-server MyServer update-interval 30
-set security dynamic-address feed-server MyServer hold-interval 3600
-set security dynamic-address feed-server MyServer feed-name AWS_IPs path FEED/AWS_IPs
-set security dynamic-address address-name AWS_IPs profile feed-name AWS_IPs
+set security dynamic-address feed-server MyAmazonFeed url http://<server>/feeder/files/AMAZON-AWS.tgz
+set security dynamic-address feed-server MyAmazonFeed update-interval 30
+set security dynamic-address feed-server MyAmazonFeed hold-interval 3600
+set security dynamic-address feed-server MyAmazonFeed feed-name AWS_ALL path AMAZON-AWS/ALL
+set security dynamic-address address-name AWS_ALL_IPs profile feed-name AWS_ALL
 ```
 
 # SRX
 ```
 > show configuration security dynamic-address 
-feed-server MyServer {
+feed-server MyAmazonFeed {
     url http://<server>/feeder/files/AMAZON-AWS.tgz;
     update-interval 30;
     hold-interval 3600;
-    feed-name AWS_IPs {
+    feed-name AWS_ALL {
         path AMAZON-AWS/ALL;
     }
 }
 address-name AWS_ALL_IPs {
     profile {
-        feed-name AMAZON-AWS/ALL;
+        feed-name AWS_ALL;
     }
 }
 ```
 ```
 root@vSRX> show security dynamic-address summary address-name AWS_ALL_IPs
 ```
+Juniper SRX output command example in doc\ folder
 
 ## List of feeds:
 - AMAZON-AWS - https://ip-ranges.amazonaws.com/ip-ranges.json
