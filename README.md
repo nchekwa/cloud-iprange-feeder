@@ -1,4 +1,5 @@
-# juniper-srx-feeder
+# cloud-iprange-feeder
+IP address ranges from Cloud Providers
 
 ## How to run:
 1) need to have pythone + pip (debian: apt-get install python-pip | centos: yum install -y pip)
@@ -76,4 +77,12 @@ Juniper SRX output command example in doc\ folder
 - GITHUB - https://api.github.com/meta
 - GOOGLE-GCS - https://www.gstatic.com/ipranges/cloud.json
 - MICROSOFT-AZURE - https://www.microsoft.com/en-us/download/details.aspx?id=56519
-- SPAMHAUS-DROP - https://www.spamhaus.org/drop/[drop.txt,edrop.txt,dropv6.txt]
+- ORACLE-OCI - https://docs.cloud.oracle.com/en-us/iaas/tools/public_ip_ranges.json
+
+ToDo:
+- "Alibaba Cloud" - list not available
+- Cloudflare - https://www.cloudflare.com/ips-v4 | https://www.cloudflare.com/ips-v6
+
+## If you looking for Threat Protection - please check:
+http://iplists.firehol.org/<br>
+https://github.com/firehol/blocklist-ipsets
