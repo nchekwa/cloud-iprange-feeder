@@ -1,0 +1,47 @@
+root@vSRX> show security dynamic-address summary address-name AWS_ALL_IPs
+
+
+    Address name                : AWS_ALL_IPs
+      Address id                : 15
+      IPv4 entries              : 2684
+      IPv6 entries              : 408
+      Mapping Feed        : AWS_ALL
+      Category/feed       : ---     / ---
+            property name : feed
+                    value : AWS_ALL
+
+
+  Server Name                 : MyAmazonFeed
+    CA  Profile Name          : ---
+    Hostname/IP               : https://10.10.10.111/feeder/files/AMAZON-AWS.tgz
+    Update interval           : 30
+    Hold   interval           : 3600
+    TLS Profile Name          : ---
+    User        Name          : ---
+
+
+    Feed Name                             : AWS_ALL
+        Mapped dynamic address name       : AWS_ALL_IPs
+        CA  Profile Name                  : ---
+        URL                               : https://10.10.10.111/feeder/files/AMAZON-AWS.tgz
+        Feed update interval              : 30       Feed hold interval :3600
+        Total update                      : 8
+        Total IPv4 entries                : 1805
+        Total IPv6 entries                : 408
+        Total download   errors           : 7        Last occurence Sat Sep 19 02:00:40 2020
+        Total db         errors           : 0        Last occurence N/A
+        Total other      errors           : 0        Last occurence N/A
+        Total ageout                      : 0        Last occurence N/A
+        Next update time                  : Sat Sep 19 02:01:42 2020
+        Next expire time                  : Sat Sep 19 03:31:12 2020
+        Flags                             : 0x18
+        Last update file size             : 40288
+        Last update IPv4 entries          : 1805
+        Last update IPv6 entries          : 408
+        Last update   begin time          : Sat Sep 19 02:01:10 2020
+        Last update   end   time          : Sat Sep 19 02:01:12 2020
+        Last update   time cost(s)        : 2
+        Last download begin time          : Sat Sep 19 02:01:10 2020
+        Last download end   time          : Sat Sep 19 02:01:11 2020
+        Last update   status              : 255
+        Last download time cost(s)        : 1
