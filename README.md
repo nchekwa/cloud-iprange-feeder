@@ -1,4 +1,4 @@
-# juniper-srx-feeder
+# cloud-iprange-feeder
 IP address ranges from Cloud Providers
 
 ## How to run:
@@ -84,5 +84,5 @@ ToDo:
 - Cloudflare - https://www.cloudflare.com/ips-v4 | https://www.cloudflare.com/ips-v6
 
 ## If you looking for Threat Protection - please check:
-http://iplists.firehol.org/
+http://iplists.firehol.org/<br>
 https://github.com/firehol/blocklist-ipsets
