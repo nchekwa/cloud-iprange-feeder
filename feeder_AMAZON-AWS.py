@@ -77,6 +77,7 @@ if __name__ == "__main__":
     # Download File
     ip_ranges = "https://ip-ranges.amazonaws.com/ip-ranges.json"
     try:
+        #resp, content = Http(disable_ssl_certificate_validation=True).request(ip_ranges)
         resp, content = Http().request(ip_ranges)
         if resp.status != 200:
             print("Unable to load %s - %d %s" % (ip_ranges, resp.status, resp.reason))
