@@ -83,11 +83,13 @@ if __name__ == "__main__":
     try:
         resp, content = Http().request(ip_ranges)
         if resp.status != 200:
-            fatal("Unable to load %s - %d %s" % (ip_ranges, resp.status, resp.reason))
+            print("Unable to load %s - %d %s" % (ip_ranges, resp.status, resp.reason))
+            exit(1)
         content = content.decode('latin1')
         ipranges = json.loads(content)
     except Exception as e:
-        fatal("Unable to load %s - %s" % (ip_ranges, e))
+        print("Unable to load %s - %s" % (ip_ranges, e))
+        exit(1)
     downloadTime = time.time()
 
     # Create one big IP dict
@@ -97,7 +99,8 @@ if __name__ == "__main__":
 
     # Check if downloaded json contains prefixes
     if len(ipranges['prefixes']) < 1:
-        fatal("No prefixes found")
+        print("No prefixes found")
+        exit(1)
 
     
     # Generate output text files

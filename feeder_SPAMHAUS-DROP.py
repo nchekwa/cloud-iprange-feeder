@@ -115,7 +115,8 @@ if __name__ == "__main__":
         try:
             resp, content = Http().request(file_src)
             if resp.status != 200:
-                fatal("Unable to load %s - %d %s" % (file_src, resp.status, resp.reason))
+                print("Unable to load %s - %d %s" % (file_src, resp.status, resp.reason))
+                exit(1)
             content = content.split("\n")
         except Exception as e:
             print("Unable to load %s - %s" % (file_src, e))

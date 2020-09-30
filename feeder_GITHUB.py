@@ -84,7 +84,8 @@ if __name__ == "__main__":
     try:
         resp, content = Http().request(ip_ranges)
         if resp.status != 200:
-            fatal("Unable to load %s - %d %s" % (ip_ranges, resp.status, resp.reason))
+            print("Unable to load %s - %d %s" % (ip_ranges, resp.status, resp.reason))
+            exit(1)
         content = content.decode('latin1')
         ipranges = json.loads(content)
     except Exception as e:
