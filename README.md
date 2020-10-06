@@ -82,6 +82,7 @@ Juniper SRX output command example in doc\ folder
 ToDo:
 - "Alibaba Cloud" - list not available
 - Cloudflare - https://www.cloudflare.com/ips-v4 | https://www.cloudflare.com/ips-v6
+- Microsoft O365 - https://endpoints.office.com/endpoints/worldwide?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7
 
 ## If you looking for Threat Protection - please check:
 http://iplists.firehol.org/<br>
