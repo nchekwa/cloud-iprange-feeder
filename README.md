@@ -10,7 +10,7 @@ IP address ranges from Cloud Providers
 
 Example console output:
 ```bash
-root@debian:/opt/feeder# python feeder_AMAZON-AWS.py
+root@debian:/opt/cloud-iprange-feeder# python feeder_AMAZON-AWS.py
 -----------------------------------------------------------------
 Process: feeder_AMAZON-AWS.py at 2021-01-22 14:11:57.906558
 Result:
