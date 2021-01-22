@@ -78,6 +78,10 @@ def create_info_file(path):
 
 # Main Script
 if __name__ == "__main__":
+    # Main Process
+    print ('-----------------------------------------------------------------')
+    print ("Process: "+(__file__)+" at "+str( datetime.now()) )
+
     # Download File
     ip_ranges = "https://www.gstatic.com/ipranges/cloud.json"
     try:
@@ -159,9 +163,9 @@ if __name__ == "__main__":
     # Create INFO file
     create_info_file(file_folder+"/"+name+".txt")
 
-    #print 'script was running %.2f seconds' % (datetime.now() - startTime)
+    # Print log
+    print ('Result:')
     endTime = time.time()
-    print ('Time:')
     print (' - download in {0} second'.format(downloadTime - startTime))
     print (' - processing in {0} second'.format(endTime - downloadTime))
     print ('   TOTAL: {0} second'.format(endTime - startTime))

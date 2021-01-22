@@ -8,6 +8,7 @@ import ipaddress
 import tarfile
 import shutil
 import time
+import random
 from httplib2 import Http
 from pprint import pprint 
 from datetime import datetime
@@ -15,9 +16,13 @@ from datetime import datetime
 # Start timer
 startTime = time.time()
 
+# Select instance
+# https://docs.microsoft.com/pl-pl/microsoft-365/enterprise/microsoft-365-ip-web-service?view=o365-worldwide
+# Instance=<Worldwide | China | Germany | USGovDoD | USGovGCCHigh>
+instance = "worldwide"
 
 # Chekc if file folder exist
-name="GITHUB"
+name="MICROSOFT-O365"
 script_path = os.path.dirname(os.path.abspath(__file__))
 file_folder = script_path+'/files'
 vendor_file_folder = script_path+'/files/'+name
@@ -29,6 +34,16 @@ if not os.path.exists(vendor_file_folder):
 if not os.path.exists(vendor_file_folder_tmp):
     os.makedirs(vendor_file_folder_tmp)
 
+def generate_uuid():
+        random_string = ''
+        random_str_seq = "0123456789abcdef"
+        uuid_format = [8, 4, 4, 4, 12]
+        for n in uuid_format:
+            for i in range(0,n):
+                random_string += str(random_str_seq[random.randint(0, len(random_str_seq) - 1)])
+            if n != 12:
+                random_string += '-'
+        return random_string
 
 # Functions
 def list_prefixes(ipv4=True):
@@ -41,10 +56,10 @@ def list_prefixes(ipv4=True):
 
     pfx_dict = {}
     for section in ipranges:
-        if section == "ssh_key_fingerprints" or section == "verifiable_password_authentication":
+        if not section.get('ips'):
             continue
 
-        for prefix in ipranges[section]:
+        for prefix in section['ips']:
             # Check what type of the Prefix it is (IPv4 vs. IPv6)
             ip_family = ipaddress.ip_network(prefix.split("/")[0]).version
 
@@ -57,10 +72,9 @@ def list_prefixes(ipv4=True):
             if ip_prefix not in pfx_dict:
                 pfx_dict[ip_prefix] = {}
                 pfx_dict[ip_prefix]['net'] = ip_prefix
-                pfx_dict[ip_prefix]['svc'] = [ section ]
+                pfx_dict[ip_prefix]['svc'] = [ section['serviceArea'] ]
                 pfx_dict[ip_prefix]['type'] = ip_family
-            else:
-                pfx_dict[ip_prefix]['svc'].append(section)
+
 
     pfx_vals = list(pfx_dict.values())
     pfx_vals = sorted(pfx_vals, key=lambda x: socket.inet_pton(address_family, x['net'].split('/')[0]))
@@ -74,7 +88,9 @@ def make_tarfile(output_filename, source_dir):
 
 def create_info_file(path):
     f = open(path, "w")
-    f.write("generateDate: "+datetime.now().strftime("%Y-%m-%d-%H-%M-%S")+time.strftime("%z", time.gmtime())+"\n")
+    f.write("instance: "+instance+"\n"+
+            "versionDate: "+endpoints_version['latest']+"\n"+
+            "generateDate: "+datetime.now().strftime("%Y-%m-%d-%H-%M-%S")+time.strftime("%z", time.gmtime())+"\n")
     f.close()
 
 # Main Script
@@ -83,9 +99,26 @@ if __name__ == "__main__":
     print ('-----------------------------------------------------------------')
     print ("Process: "+(__file__)+" at "+str( datetime.now()) )
 
+    # Random UUID
+    uuid = generate_uuid()
+
     # Download File
-    ip_ranges = "https://api.github.com/meta"
+    version = "https://endpoints.office.com/version/"+instance+"?clientrequestid="+uuid
     try:
+        #resp, content = Http(disable_ssl_certificate_validation=True).request(ip_ranges)
+        resp, content = Http().request(version)
+        if resp.status != 200:
+            print("Unable to load %s - %d %s" % (version, resp.status, resp.reason))
+            exit(1)
+        content = content.decode('latin1')
+        endpoints_version = json.loads(content)
+    except Exception as e:
+        print("Unable to load %s - %s" % (version, e))
+        exit(1)
+
+    ip_ranges = "https://endpoints.office.com/endpoints/"+instance+"?clientrequestid="+uuid
+    try:
+        #resp, content = Http(disable_ssl_certificate_validation=True).request(ip_ranges)
         resp, content = Http().request(ip_ranges)
         if resp.status != 200:
             print("Unable to load %s - %d %s" % (ip_ranges, resp.status, resp.reason))
@@ -96,14 +129,13 @@ if __name__ == "__main__":
         print("Unable to load %s - %s" % (ip_ranges, e))
         exit(1)
     downloadTime = time.time()
- 
     # Create one big IP dict
     prefixes = list()
     prefixes.extend(list_prefixes(ipv4=True))
     prefixes.extend(list_prefixes(ipv4=False))
 
     # Check if downloaded json contains prefixes
-    if len(ipranges['web']) < 1:
+    if len(ipranges[0]['ips']) < 1:
         print("No prefixes found")
         exit(1)
 

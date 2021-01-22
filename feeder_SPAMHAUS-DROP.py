@@ -76,7 +76,7 @@ def list_prefixes(ipv4=True):
 
         if re.match(r'^(\d|abcdef)', line.lower()):
             s_line = line.split(" ")
-            prefix = unicode(s_line[0], "utf-8")
+            prefix = s_line[0]
             ip_family = ipaddress.ip_network(prefix.split("/")[0]).version
 
             # Proceed only for specyfic type
@@ -109,25 +109,32 @@ def create_info_file(path):
 
 # Main Script
 if __name__ == "__main__":
+    # Main Process
+    print ('-----------------------------------------------------------------')
+    print ("Process: "+ (__file__)+ " at "+str( datetime.now()) )
+    
+    downloadTime = 0
+
     # Download File
     prefixes = list()
     for drop_type, file_src in files.items():
+        file_download_startTime = time.time()
         try:
             resp, content = Http().request(file_src)
             if resp.status != 200:
                 print("Unable to load %s - %d %s" % (file_src, resp.status, resp.reason))
                 exit(1)
-            content = content.split("\n")
+            content = str(content)
+            content = content.split("\\n")
         except Exception as e:
             print("Unable to load %s - %s" % (file_src, e))
             exit(1)
-        
+        file_download_Time= time.time() - file_download_startTime
+        downloadTime = downloadTime + file_download_Time
+    
         # Create one big IP dict
         prefixes.extend(list_prefixes(ipv4=True))
         prefixes.extend(list_prefixes(ipv4=False))
-
-    downloadTime = time.time()
- 
 
     # Generate output text files
     file_out = dict()
@@ -179,9 +186,9 @@ if __name__ == "__main__":
     # Create INFO file
     create_info_file(file_folder+"/"+name+".txt")
 
-    #print 'script was running %.2f seconds' % (datetime.now() - startTime)
+    # Print log
+    print ('Result:')
     endTime = time.time()
-    print ('Time:')
-    print (' - download in {0} second'.format(downloadTime - startTime))
-    print (' - processing in {0} second'.format(endTime - downloadTime))
+    print (' - download in {0} second'.format(downloadTime))
+    print (' - processing in {0} second'.format((endTime-downloadTime) - startTime ))
     print ('   TOTAL: {0} second'.format(endTime - startTime))

@@ -124,9 +124,14 @@ def create_info_file(path):
 
 # Main Script
 if __name__ == "__main__":
+    # Main Process
+    print ('-----------------------------------------------------------------')
+    print ("Process: "+(__file__)+" at "+str( datetime.now()) )
+    
     h = Http()
     (resp_headers, content) = h.request('https://www.microsoft.com/en-us/download/details.aspx?id=56519', headers={'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0'})
-    search_file = re.findall(r'ServiceTags[^\/]+(?=\.)\.json',content)
+    #print(type(content))
+    search_file = re.findall(r'ServiceTags[^\/]+(?=\.)\.json',str(content))
     json_file_name = search_file[0]
 
     # Download File
@@ -215,9 +220,9 @@ if __name__ == "__main__":
     # Create INFO file
     create_info_file(file_folder+"/"+name+".txt")
 
-    #print 'script was running %.2f seconds' % (datetime.now() - startTime)
+    # Print log
+    print ('Result:')
     endTime = time.time()
-    print ('Time:')
     print (' - download in {0} second'.format(downloadTime - startTime))
     print (' - processing in {0} second'.format(endTime - downloadTime))
     print ('   TOTAL: {0} second'.format(endTime - startTime))
