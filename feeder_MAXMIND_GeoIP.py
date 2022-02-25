@@ -19,10 +19,10 @@ startTime = time.time()
 # API_KEY 
 # Define inside this script or
 # 1) set linux Environment Variable 'api_key' or 'maxmind_api_key'
-#    ie: root@linux:/opt/srx-scripts# export maxmind_api_key=1234567890abcde
+#       root@linux:/opt/cloud-iprange-feeder# export maxmind_api_key=1234567890abcde
 #    if you whant to remove Environment Variable use command: unset maxmind_api_key
 # 2) use script togethere with argument
-#    ie. root@linux:/opt/srx-scripts# python feeder_MAXMIND_GeoIP.py 1234567890abcde
+#       root@linux:/opt/cloud-iprange-feeder# python feeder_MAXMIND_GeoIP.py 1234567890abcde
 
 api_key = None
 

@@ -82,6 +82,7 @@ Juniper SRX output command example in doc\ folder
 - MICROSOFT-AZURE - https://www.microsoft.com/en-us/download/details.aspx?id=56519
 - Microsoft O365 - https://endpoints.office.com/endpoints/worldwide?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7
 - ORACLE-OCI - https://docs.cloud.oracle.com/en-us/iaas/tools/public_ip_ranges.json
+- MAXMIND_GeoIP - https://www.maxmind.com/
 
 ToDo:
 - "Alibaba Cloud" - list not available
