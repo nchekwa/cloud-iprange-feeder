@@ -1,0 +1,10 @@
+files/MICROSOFT-O365
+├── ALL
+├── ALL_ipv4
+├── ALL_ipv6
+├── svc_Common
+├── svc_Exchange
+├── svc_SharePoint
+└── svc_Skype
+
+0 directories, 7 files

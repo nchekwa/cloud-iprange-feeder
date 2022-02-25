@@ -41,7 +41,7 @@ def list_prefixes(ipv4=True):
 
     pfx_dict = {}
     for section in ipranges:
-        if section == "ssh_key_fingerprints" or section == "verifiable_password_authentication":
+        if section == "ssh_key_fingerprints" or section == "verifiable_password_authentication" or section == "ssh_keys":
             continue
 
         for prefix in ipranges[section]:
