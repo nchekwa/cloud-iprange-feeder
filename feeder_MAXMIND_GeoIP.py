@@ -214,7 +214,9 @@ if __name__ == "__main__":
         file_name = vendor_file_folder_tmp+"/"+key
         with open(file_name, 'w') as f:
             for item in file_item:
-                f.write("%s\n" % item)
+                elements = "%s\n" % item
+            f.write(elements)
+            f.close()
 
     # Remove previous folder
     if os.path.exists(vendor_file_folder_tmp) == True:
@@ -236,8 +238,8 @@ if __name__ == "__main__":
     # Print log
     print ('Result:')
     endTime = time.time()
-    print (' - download in {0} second'.format(downloadTime - startTime))
-    print (' - CSV parsed in {0} second'.format(parserTime - downloadTime))
-    print (' - processing in {0} second'.format(endTime - parserTime))
-    print ('   TOTAL: {0} second'.format(endTime - startTime))
+    print (' - download in {:.3f} second'.format(downloadTime - startTime))
+    print (' - CSV parsed in {:.3f} second'.format(parserTime - downloadTime))
+    print (' - processing in {:.3f} second'.format(endTime - parserTime))
+    print ('   TOTAL: {:.2f} second'.format(endTime - startTime))
 

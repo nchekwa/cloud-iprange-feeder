@@ -91,3 +91,9 @@ ToDo:
 ## If you looking for Threat Protection - please check:
 http://iplists.firehol.org/<br>
 https://github.com/firehol/blocklist-ipsets
+
+
+## Othere Geo-IP Feeds:
+https://github.com/sapics/ip-location-db#readme
+https://ipinfo.io/
+ASN-https://bgp.potaroo.net/cidr/autnums.html
