@@ -12,6 +12,7 @@ import requests
 from pprint import pprint 
 from datetime import datetime
 from zipfile import ZipFile
+from collections import defaultdict
 
 # Start timer
 startTime = time.time()
@@ -37,9 +38,6 @@ if api_key is None:
         if sys.argv[1] is not None:
             api_key = sys.argv[1]
 
-
-
-
 # Chekc if file folder exist
 name="MAXMIND_GeoIP"
 script_path = os.path.dirname(os.path.abspath(__file__))
@@ -53,6 +51,8 @@ if not os.path.exists(vendor_file_folder):
 if not os.path.exists(vendor_file_folder_tmp):
     os.makedirs(vendor_file_folder_tmp)
 
+
+# Functions
 def read_location(lang = "en"):
     global geoip_path
     csvFilePath = geoip_path+"/GeoLite2-Country-Locations-"+lang+".csv"
@@ -61,11 +61,10 @@ def read_location(lang = "en"):
         csvReader = csv.DictReader(csvf)
         for rows in csvReader:
             key = rows['geoname_id']
+            rows['country_name'] = rows['country_name'].replace(" ", "_").replace(",", "").replace("ç", "c").replace("Å", "A").replace("é", "e").replace("ã", "a")
             data[key] = rows
     return(data)
 
-
-# Functions
 def list_prefixes(ipv4=True):
     global geoip_path
     global location
@@ -89,10 +88,16 @@ def list_prefixes(ipv4=True):
 
             # Check if 'geoname_id' exist
             if rows['geoname_id'] != "":
-                rows['geoname'] = f"{location[rows['geoname_id']]['continent_code']}_{location[rows['geoname_id']]['continent_name']}"
-                rows['is_in_european_union'] = location[rows['geoname_id']]['is_in_european_union']
+                rows['geoname']                 = f"{location[rows['geoname_id']]['continent_code']}_{location[rows['geoname_id']]['continent_name']}"
+                rows['geoname_country']         = f"{location[rows['geoname_id']]['country_iso_code']}_{location[rows['geoname_id']]['country_name']}"
+                rows['is_in_european_union']    = location[rows['geoname_id']]['is_in_european_union']
             else:
                 rows['geoname'] = "Unknown"
+                rows['geoname_country'] = "Unknown"
+
+            # If Geoname dosnt have Country ie. 6255147
+            if rows['geoname_country'] == "_":
+                rows['geoname_country'] = "Unknown"
 
             # Check if 'geoname_id' exist
             if rows['registered_country_geoname_id'] != "":
@@ -110,7 +115,7 @@ def list_prefixes(ipv4=True):
 
     # Just for Debug purpose (generate JSON in temp folder if needed)
     #import json
-    #with open(csvFilePath+".json", 'w', encoding='utf-8') as jsonf:
+    #with open(f"MAXMIND_ipv{ip_type}.json", 'w', encoding='utf-8') as jsonf:
     #    jsonf.write(json.dumps(pfx_dict, indent=4))
 
     pfx_vals = list(pfx_dict.values())
@@ -154,7 +159,7 @@ if __name__ == "__main__":
 
         # Find Path to Temporary UnZiped GeoIP Folder
         for directory in os.listdir(vendor_file_folder_tmp):
-            if directory.startswith("Geo"):
+            if directory.startswith("GeoLite2-Country-CSV_"):
                 geoip_path = vendor_file_folder_tmp+"/"+directory
 
         # We dont need anymore original ZIP file
@@ -172,55 +177,34 @@ if __name__ == "__main__":
     prefixes.extend(list_prefixes(ipv4=True))
     prefixes.extend(list_prefixes(ipv4=False))
 
-
+    parserTime = time.time()
 
 
     # Generate output text files
-    file_out = dict()
-    file_out['ALL_ipv4'] = list()
-    file_out['ALL_ipv6'] = list()
-    file_out['ALL'] = list()
+    file_out = defaultdict(list)
     for ip_item in prefixes:
+        ip_version = str(ip_item['type'])
+
         # ALL - IPv4 and IPv6
         file_out['ALL'].append(str(ip_item['network']))
+        file_out['ALL_ipv'+ip_version].append(str(ip_item['network']))
 
-        if ip_item['type'] == 4:
-            file_out['ALL_ipv4'].append(str(ip_item['network']))
-
-        if ip_item['type'] == 6:
-            file_out['ALL_ipv6'].append(str(ip_item['network']))
-
-        # continent ALL
+        ### Continent
         continent = "continent_"+ip_item['geoname'].replace(" ", "_")
-        try:
-            file_out[continent]
-        except:
-            file_out[continent] = list()
         file_out[continent].append(str(ip_item['network'])) 
+        file_out[continent+"_ipv"+ip_version].append(str(ip_item['network'])) 
 
-        # continent IPv4/6
-        continent = f"{continent}_ipv{ip_item['type']}"
-        try:
-            file_out[continent]
-        except:
-            file_out[continent] = list()
-        file_out[continent].append(str(ip_item['network'])) 
-
-        # country ALL
-        country = "country_"+ip_item['registered_country_geoname'].replace(" ", "_").replace(",", "").replace("ç", "c")
-        try:
-            file_out[country]
-        except:
-            file_out[country] = list()
+        ### Geo country
+        country = "geo_country_"+ip_item['geoname_country']
         file_out[country].append(str(ip_item['network'])) 
+        file_out[country+"_ipv"+ip_version].append(str(ip_item['network'])) 
 
-        # country IPv4/6
-        country = f"{country}_ipv{ip_item['type']}"
-        try:
-            file_out[country]
-        except:
-            file_out[country] = list()
-        file_out[country].append(str(ip_item['network'])) 
+        ### Registered country
+        if (ip_item['geoname_country'] != ip_item['registered_country_geoname'] and ip_item['registered_country_geoname'] != "Unknown" ):
+            country = "registered_country_"+ip_item['registered_country_geoname']
+            file_out[country].append(str(ip_item['network'])) 
+            file_out[country+"_ipv"+ip_version].append(str(ip_item['network'])) 
+
 
     # Remove GeoIP unziped folder
     shutil.rmtree(geoip_path) 
@@ -253,6 +237,7 @@ if __name__ == "__main__":
     print ('Result:')
     endTime = time.time()
     print (' - download in {0} second'.format(downloadTime - startTime))
-    print (' - processing in {0} second'.format(endTime - downloadTime))
+    print (' - CSV parsed in {0} second'.format(parserTime - downloadTime))
+    print (' - processing in {0} second'.format(endTime - parserTime))
     print ('   TOTAL: {0} second'.format(endTime - startTime))
 
