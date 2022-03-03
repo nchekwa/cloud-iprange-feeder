@@ -213,9 +213,8 @@ if __name__ == "__main__":
     for key,file_item in file_out.items():
         file_name = vendor_file_folder_tmp+"/"+key
         with open(file_name, 'w') as f:
-            for item in file_item:
-                elements = "%s\n" % item
-            f.write(elements)
+            elements = "\n".join(file_item)
+            f.write(str(elements))
             f.close()
 
     # Remove previous folder
