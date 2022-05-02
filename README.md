@@ -13,7 +13,7 @@ IP address ranges from Cloud Providers and from othere sources
 ## How to run:
 1) you will need to have python + pip <br>
     ```bash
-    debian# apt-get install python-pip
+    debian# apt-get install python3-pip
     centos# yum install -y pip
     ```
 2) install needed exttra lib:<br>
